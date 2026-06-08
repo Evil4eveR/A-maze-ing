@@ -11,10 +11,10 @@ T = TypeVar('T')
 class MazeAlgorithm(ABC):
     name: str
     _DIRECTIONS: ClassVar[list[tuple[int, int]]] = [
-        (0, -1),  # Up
-        (1, 0),   # Right
-        (0, 1),   # Down
-        (-1, 0)   # Left
+        (0, -1),  # NORTH
+        (1, 0),   # EAST
+        (0, 1),   # SOUTH
+        (-1, 0)   # WEST
     ]
 
     def __init__(
@@ -54,10 +54,10 @@ class MazeSolver(ABC):
     name: str
 
     _DIRECTIONS: ClassVar[list[tuple[int, int]]] = [
-        (0, -1),  # Up
-        (1, 0),   # Right
-        (0, 1),   # Down
-        (-1, 0)   # Left
+        (0, -1),  # NORTH
+        (1, 0),   # EAST
+        (0, 1),   # SOUTH
+        (-1, 0)   # WEST
     ]
 
     def __init__(
