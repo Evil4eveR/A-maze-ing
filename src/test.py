@@ -20,6 +20,8 @@ width, height = 20, 10
 maze = MazeGenerator.create(
     width=width,
     height=height,
+    entry_point=(5, 3),
+    exit_point=(19, 4),
     hooks=[
         BreakPerfect(percent=0.2, seed=42),
         Add42Pattern(),
@@ -37,7 +39,6 @@ colors = [
 # maze.open_entry_exit()
 
 path = BFSMazeSolver(maze).solve()
-# path = None
 
 renderer = AsciiMazeRenderer(maze, path=path, colors=colors)
 
