@@ -54,7 +54,7 @@ class MazeGenerator:
         )
 
         if cfg.seed is None:
-            seed = randint(1, 100000000000000)
+            cfg.seed = randint(1, 100000000000000)
 
         pre_hooks = [hook for hook in cfg.hooks or [] if hook.stage == "pre"]
         post_hooks = [hook for hook in cfg.hooks or [] if hook.stage == "post"]
@@ -73,12 +73,12 @@ class MazeGenerator:
 
         algorithm = algo_class(maze=maze)
         if animated:
-            yield from algorithm.generate_step(seed=seed)
+            yield from algorithm.generate_step(seed=cfg.seed)
         else:
-            algorithm.generate(seed=seed)
+            algorithm.generate(seed=cfg.seed)
             yield maze
 
-        maze.seed = seed
+        maze.seed = cfg.seed
         maze.algorithm = algo_class.name
 
         for hook in post_hooks or []:
