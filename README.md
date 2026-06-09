@@ -356,6 +356,10 @@ Hooks allow transformations to be applied before or after maze generation. See â
 
 ---
 
+## Step-by-Step Guide
+
+New to the project? Read the **[Step-by-Step Maze Generation Guide](docs/STEP_BY_STEP_GUIDE.md)** â€” a beginner-friendly walkthrough that explains the entire process from configuration to rendering, with diagrams and commented code.
+
 ## Source Code Documentation
 
 Each directory in `src/` has its own `README.md` with detailed documentation:
