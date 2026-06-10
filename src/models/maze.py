@@ -1,4 +1,5 @@
 from models.cell import Cell
+from exceptions import InvalidEntryExitError
 
 
 class Maze:
@@ -12,17 +13,20 @@ class Maze:
         self.width = width
         self.height = height
         self.grid = [
-            [Cell(x=x, y=y) for x in range(self.width)]
-            for y in range(self.height)
+            [Cell(x=x, y=y) for x in range(self.width)] for y in range(self.height)
         ]
         self.entry = self.get_cell(*entry_point)
-        self.exit = self.get_cell(*(exit_point or (width - 1, height - 1)))
+        self.exit = (
+            self.get_cell(*exit_point)
+            if exit_point is not None
+            else self.get_cell(width - 1, height - 1)
+        )
         self.seed: int | None = None
         self.algorithm: str | None = None
 
-    def get_cell(self, x: int, y: int) -> Cell | None:
+    def get_cell(self, x: int, y: int) -> Cell:
         if x < 0 or y < 0 or x >= self.width or y >= self.height:
-            return None
+            raise InvalidEntryExitError(f"Cell ({x}, {y}) is out of bounds.")
         return self.grid[y][x]
 
     def open_entry_exit(self) -> None:
@@ -39,9 +43,7 @@ class Maze:
         elif cell.x == self.width - 1:
             cell.remove_wall(Cell.SOUTH)
         else:
-            raise ValueError(
-                f"Cell ({cell.x}, {cell.y}) is not on the border."
-            )
+            raise ValueError(f"Cell ({cell.x}, {cell.y}) is not on the border.")
 
     def get_unvisited(self) -> list[Cell]:
         return [
@@ -52,9 +54,7 @@ class Maze:
         ]
 
     def add_blocked_cells(
-        self,
-        cells: list[tuple[int, int]],
-        offset: tuple[int, int] = (0, 0)
+        self, cells: list[tuple[int, int]], offset: tuple[int, int] = (0, 0)
     ) -> None:
         ox, oy = offset
         for cx, cy in cells:

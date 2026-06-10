@@ -1,6 +1,5 @@
 from typing import Generator
 from interfaces import MazeAlgorithm
-
 from random import Random
 from models.maze import Maze
 

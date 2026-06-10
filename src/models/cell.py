@@ -45,9 +45,9 @@ class Cell:
         if not force and (self.blocked or other.blocked):
             return
 
-        self._validate_cell_between(other)
-        dx = other.x - self.x
-        dy = other.y - self.y
+        (dx, dy) = self._validate_cell_between(other)
+        # dx = other.x - self.x
+        # dy = other.y - self.y
 
         if dx == 1:
             self.remove_wall(Cell.SOUTH)
@@ -66,16 +66,16 @@ class Cell:
         self,
         value: int
     ) -> None:
-        if value is not None and not (0 <= value <= 0b1111):
+        if value is not None and not value in range(16):
             raise MazeWallError(
                 "Walls must be a 4-bit integer (0-15)."
             )
 
-    def _validate_cell_between(self, other: 'Cell') -> None:
+    def _validate_cell_between(self, other: 'Cell') -> tuple[int, int]:
         dx = abs(other.x - self.x)
         dy = abs(other.y - self.y)
         if (dx == 1 and dy == 0) or (dx == 0 and dy == 1):
-            return
+            return (other.x - self.x, other.y - self.y)
         raise MazeWallError(
             "Cells must be adjacent to remove walls between them."
         )
