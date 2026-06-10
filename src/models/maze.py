@@ -24,14 +24,15 @@ class Maze:
         self.seed: int | None = None
         self.algorithm: str | None = None
 
-    def get_cell(self, x: int, y: int) -> Cell:
+    def get_cell(self, x: int, y: int) -> Cell | None:
         if x < 0 or y < 0 or x >= self.width or y >= self.height:
-            raise InvalidEntryExitError(f"Cell ({x}, {y}) is out of bounds.")
+            return None
+            # raise InvalidEntryExitError(f"Cell ({x}, {y}) is out of bounds.")
         return self.grid[y][x]
 
     def open_entry_exit(self) -> None:
-        self._open_border_wall(self.entry)
-        self._open_border_wall(self.exit)
+        self._open_border_wall(self.entry) # type: ignore[arg-type]
+        self._open_border_wall(self.exit) # type: ignore[arg-type]
 
     def _open_border_wall(self, cell: Cell) -> None:
         if cell.y == 0:
