@@ -78,7 +78,9 @@ class BaseMazeSolver(ABC):
         """Solve the maze and return the path from entry to exit."""
         raise NotImplementedError()
 
-    def solve_step(self) -> Generator[tuple[list[Cell] | None, bool], None, None]:
+    def solve_step(
+        self
+    ) -> Generator[tuple[list[Cell] | None, bool], None, None]:
         """Solve the maze step-by-step and yield the current path."""
         path = self.solve()
         yield path, True

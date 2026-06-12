@@ -20,7 +20,9 @@ class Maze:
         if _entry is None:
             raise ValueError(f"Invalid entry point: {entry_point}")
         self.entry: Cell = _entry
-        _exit_pt = exit_point if exit_point is not None else (width - 1, height - 1)
+        _exit_pt = (
+            exit_point if exit_point is not None else (width - 1, height - 1)
+        )
         _exit = self.get_cell(*_exit_pt)
         if _exit is None:
             raise ValueError(f"Invalid exit point: {_exit_pt}")
