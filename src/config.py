@@ -23,18 +23,19 @@ class Settings(BaseSettings):
     output_file: str
     perfect: bool
     seed: int | None = None
+    themes_path: str = "themes.json"
 
-    @computed_field  # type: ignore[prop-decorator]
+    @computed_field
     @property
     def entry(self) -> tuple[int, int]:
         x, y = self.entry_raw.split(',')
         return int(x), int(y)
 
-    @computed_field  # type: ignore[prop-decorator]
+    @computed_field
     @property
     def exit(self) -> tuple[int, int]:
         x, y = self.exit_raw.split(',')
         return int(x), int(y)
 
 
-settings = Settings()  # type: ignore[call-arg]
+settings = Settings()

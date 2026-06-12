@@ -199,5 +199,5 @@ def quit_app() -> None:
 
 
 if __name__ == "__main__":
-    dp.data['theme_gen'] = ThemeGenerator()
+    dp.data['theme_gen'] = ThemeGenerator(settings.themes_path)
     dp.run(30)
