@@ -14,7 +14,7 @@ class AsciiMazeRenderer(MazeRenderer[str]):
     def __init__(
         self,
         maze: Maze,
-        colors: Theme | None = None,
+        themes: Theme | None = None,
         path: list[Cell] | None = None,
     ):
         super().__init__(maze)
@@ -23,7 +23,7 @@ class AsciiMazeRenderer(MazeRenderer[str]):
             [1] * (maze.width * 2 + 1) for _ in range(maze.height * 2 + 1)
         ]
         self.output_str = ""
-        self.colors = colors or Theme()
+        self.themes = themes or Theme()
         self.connect = True
 
     def render(self) -> str:
@@ -87,17 +87,17 @@ class AsciiMazeRenderer(MazeRenderer[str]):
         for row in self.renderer:
             for cell in row:
                 if cell == 0:
-                    s += self._get_colored_str(settings.cell, self.colors.cell)
+                    s += self._get_colored_str(settings.cell, self.themes.cell)
                 elif cell == 1:
-                    s += self._get_colored_str(settings.wall, self.colors.wall)
+                    s += self._get_colored_str(settings.wall, self.themes.wall)
                 elif cell == 2:
-                    s += self._get_colored_str(settings.wall, self.colors.blocked_cell) # noqa
+                    s += self._get_colored_str(settings.wall, self.themes.blocked_cell) # noqa
                 elif cell == 3:
-                    s += self._get_colored_str(settings.path, self.colors.path)
+                    s += self._get_colored_str(settings.path, self.themes.path)
                 elif cell == 4:
-                    s += self._get_colored_str(settings.path, self.colors.entry) # noqa
+                    s += self._get_colored_str(settings.path, self.themes.entry) # noqa
                 elif cell == 5:
-                    s += self._get_colored_str(settings.path, self.colors.exit)
+                    s += self._get_colored_str(settings.path, self.themes.exit)
             s += "\n"
         return s
 

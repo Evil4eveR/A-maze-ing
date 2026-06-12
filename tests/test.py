@@ -45,11 +45,11 @@ colors = [
 
 # path = BFSMazeSolver(maze).solve()
 
-renderer = AsciiMazeRenderer(maze, path=None, colors=colors)
+renderer = AsciiMazeRenderer(maze, path=None, themes=colors)
 
 with Live(refresh_per_second=5) as live:
     for maze in MazeGenerator.create_animated(config=cfg):
-        renderer = AsciiMazeRenderer(maze, path=None, colors=colors)
+        renderer = AsciiMazeRenderer(maze, path=None, themes=colors)
         live.update(renderer.render())
         time.sleep(0.01)
 

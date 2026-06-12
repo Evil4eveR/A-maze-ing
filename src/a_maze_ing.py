@@ -25,7 +25,7 @@ maze_config = make_maze_config()
 
 def render_maze(live: Live, maze: Maze, theme: Theme) -> AsciiMazeRenderer:
     path = dp.data.get('path') if dp.data.get('is_path_shown') else None
-    renderer = AsciiMazeRenderer(maze, colors=theme, path=path)
+    renderer = AsciiMazeRenderer(maze, themes=theme, path=path)
     live.update(build_ui(
         renderer.render(),
         dp.get_help(),
@@ -139,7 +139,7 @@ def animate_maze(live: Live, theme: Theme) -> None:
 
 @dp.on("t", help="Animate the maze solving")
 def animate_path(live: Live, maze: Maze, theme: Theme) -> None:
-    renderer = AsciiMazeRenderer(maze, colors=theme)
+    renderer = AsciiMazeRenderer(maze, themes=theme)
     for path, is_final in MazeSolver.solve_animated(maze):
         renderer.connect = is_final
         renderer.path = path
