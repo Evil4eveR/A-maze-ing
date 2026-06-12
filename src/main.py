@@ -21,6 +21,7 @@ from renderer.ascii import AsciiMazeRenderer
 
 dp = Dispatcher()
 maze_config = make_maze_config()
+dp.data['theme_gen'] = ThemeGenerator(settings.themes_path)
 
 
 def render_maze(live: Live, maze: Maze, theme: Theme) -> AsciiMazeRenderer:
@@ -214,5 +215,4 @@ def quit_app() -> None:
 
 
 if __name__ == "__main__":
-    dp.data['theme_gen'] = ThemeGenerator(settings.themes_path)
     dp.run(30)
