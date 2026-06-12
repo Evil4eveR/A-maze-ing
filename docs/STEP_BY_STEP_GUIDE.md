@@ -132,7 +132,7 @@ When the algorithm decides to connect two adjacent cells, the `remove_walls_betw
 Before:                        After:
 ┌───┬───┐                    ┌───┬───┐
 │ A │ B │   ── remove ──►    │ A   B │
-└───┴───┘   wall between     └───┴───┘
+└───┴───┘   wall between    └───┴───┘
 ```
 
 In the code, this is done using bitwise operations:
