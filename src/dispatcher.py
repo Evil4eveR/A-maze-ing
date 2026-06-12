@@ -10,7 +10,7 @@ import readchar
 
 class Dispatcher:
     def __init__(self):
-        self._handlers: dict[str, Callable] = {}
+        self._handlers: dict[str, Callable[..., Any]] = {}
         self.data: Dict[str, Any] = {}
         self.command_help: Dict[str, str] = {}
         self._startup: Callable[[Live], None] | None = None
@@ -18,7 +18,7 @@ class Dispatcher:
         self._running = True
 
     def get_help(self) -> str:
-        lines = []
+        lines: list[str] = []
         for i, (key, text) in enumerate(self.command_help.items()):
             lines.append(
                 f"{i+1}. [bold cyan]{key}[/bold cyan]: {text}"
@@ -33,14 +33,16 @@ class Dispatcher:
         self._shutdown = func
         return func
 
-    def on(self, key: str, help: str = ""):
-        def decorator(func):
+    def on(
+        self, key: str, help: str = ""
+    ) -> Callable[[Callable[..., Any]], Callable[..., Any]]:
+        def decorator(func: Callable[..., Any]) -> Callable[..., Any]:
             self._handlers[key] = func
             self.command_help[key] = help
             return func
         return decorator
 
-    def dispatch(self, key: str, **kwargs) -> bool:
+    def dispatch(self, key: str, **kwargs: dict[str, Any]) -> bool:
         if key in self._handlers:
             func = self._handlers[key]
             kw = self._filter_params(func, **kwargs)
@@ -48,8 +50,12 @@ class Dispatcher:
             return True
         return False
 
-    def _filter_params(self, func: Callable, **kwargs) -> dict[str, Any]:
-        kw = {}
+    def _filter_params(
+        self,
+        func: Callable[..., Any],
+        **kwargs: dict[str, Any]
+    ) -> dict[str, Any]:
+        kw: dict[str, Any] = {}
         params = inspect.signature(func).parameters
         data = self.data.copy()
         data.update(kwargs)
@@ -70,7 +76,7 @@ class Dispatcher:
     def run(self, refresh_per_second: int = 10) -> None:
         self._running = True
         _busy = False
-        key_queue = queue.Queue()
+        key_queue: queue.Queue[str] = queue.Queue()
 
         def read_keys() -> None:
             while self._running:

@@ -21,14 +21,14 @@ class MazeSolver:
     ) -> list[Cell] | None:
         for path in cls._build(maze, algo):
             pass
-        return path or None
+        return path
 
     @classmethod
     def solve_animated(
         cls,
         maze: Maze,
         algo: str | Type[MazeSolverBase] = 'bfs'
-    ) -> Generator[list[Cell], None, None]:
+    ) -> Generator[tuple[list[Cell], bool], None, None]:
         yield from cls._build(maze, algo, animated=True)
 
     @classmethod
@@ -37,7 +37,7 @@ class MazeSolver:
         maze: Maze,
         algo: str | Type[MazeSolverBase] = 'bfs',
         animated: bool = False
-    ) -> Generator[tuple[list[Cell], bool] | list[Cell], None, None]:
+    ) ->  Generator[tuple[list[Cell], bool], None, None]:
         solver_class = algo
         if isinstance(algo, str):
             solver_class = cls.SOLVER_MAP.get(algo)

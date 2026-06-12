@@ -4,10 +4,10 @@ import json
 
 def build_ui(
     render_str: str,
-    maze_seed: int,
     helper_str: str,
     algo: str,
-    theme_name: str
+    theme_name: str,
+    maze_seed: int | None = None
 ) -> str:
     text = (
         f"{render_str}\n\n"
@@ -15,7 +15,7 @@ def build_ui(
         f"Press buttons to interact with the maze:\n"
         f"Theme: {theme_name}\n"
         f"Algorithm: {algo}\n"
-        f"Maze Seed: {maze_seed}\n"
+        f"Maze Seed: {maze_seed or 'N/A'}\n"
         f"{helper_str}\n"
     )
     return text

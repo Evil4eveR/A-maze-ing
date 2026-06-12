@@ -30,7 +30,7 @@ def render_maze(live: Live, maze: Maze, theme: Theme) -> AsciiMazeRenderer:
         renderer.render(),
         maze_config.seed,
         dp.get_help(),
-        maze.algo,
+        maze.algo or '',
         theme.name
     ))
     return renderer

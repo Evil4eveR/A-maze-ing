@@ -3,6 +3,8 @@ from typing import Generator
 from collections import deque
 from random import randint
 
+from mazegen.interfaces import MazeAlgorithm
+
 from .algo.dfs import DFSMazeGenerator
 from .algo.kruskal import KruskalMazeGenerator
 
@@ -59,9 +61,11 @@ class MazeGenerator:
         pre_hooks = [hook for hook in cfg.hooks or [] if hook.stage == "pre"]
         post_hooks = [hook for hook in cfg.hooks or [] if hook.stage == "post"]
 
-        algo_class = cfg.algo
+        algo_class: type[MazeAlgorithm] | None = None
         if isinstance(cfg.algo, str):
-            algo_class = cls.ALGO_MAP.get(cfg.algo or '')
+            algo_class = cls.ALGO_MAP.get(cfg.algo)
+        else:
+            algo_class = cfg.algo
 
         if algo_class is None:
             raise MazeError(f"Unsupported algorithm: {cfg.algo}")
