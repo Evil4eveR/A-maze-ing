@@ -6,9 +6,12 @@ from ..models.maze import Maze
 
 
 class PrimMazeGenerator(MazeAlgorithm):
+    """Maze generator using Prim's algorithm."""
+
     name = 'prim'
 
     def generate(self, seed: int | None = None) -> None:
+        """Generate a maze using Prim's algorithm."""
         for _ in self._generate_prim(seed):
             pass
         self._reset_visited()
@@ -17,7 +20,7 @@ class PrimMazeGenerator(MazeAlgorithm):
         self,
         seed: int | None = None
     ) -> Generator[Maze, None, None]:
-        """Generate a maze step-by-step using Prim's algorithm."""
+        """Yield maze states step-by-step using Prim's algorithm."""
         yield from self._generate_prim(seed)
         self._reset_visited()
 
@@ -25,6 +28,7 @@ class PrimMazeGenerator(MazeAlgorithm):
         self,
         seed: int | None = None
     ) -> Generator[Maze, None, None]:
+        """Core Prim's generation logic; yields maze after each step."""
         rng = Random(seed)
 
         start = self.maze.get_cell(0, 0)

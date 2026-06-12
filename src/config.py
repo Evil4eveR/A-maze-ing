@@ -7,6 +7,8 @@ import sys
 
 
 class Settings(BaseSettings):
+    """Application settings loaded from the config file passed as CLI argument.""" # noqa
+
     model_config = SettingsConfigDict(
         env_file=sys.argv[1] if len(sys.argv) > 1 else None,
         env_file_encoding="utf-8",
@@ -23,18 +25,21 @@ class Settings(BaseSettings):
     output_file: str
     perfect: bool
     seed: int | None = None
+    themes_path: str = "themes.json"
 
-    @computed_field  # type: ignore[prop-decorator]
+    @computed_field
     @property
     def entry(self) -> tuple[int, int]:
+        """Parse ENTRY config key into an (x, y) tuple."""
         x, y = self.entry_raw.split(',')
         return int(x), int(y)
 
-    @computed_field  # type: ignore[prop-decorator]
+    @computed_field
     @property
     def exit(self) -> tuple[int, int]:
+        """Parse EXIT config key into an (x, y) tuple."""
         x, y = self.exit_raw.split(',')
         return int(x), int(y)
 
 
-settings = Settings()  # type: ignore[call-arg]
+settings = Settings()

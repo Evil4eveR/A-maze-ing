@@ -3,6 +3,7 @@ from dataclasses import dataclass
 
 @dataclass
 class Theme:
+    """Colour theme for maze rendering."""
     name: str = "Default"
     cell: str = "#000000"
     wall: str = "#2596BE"

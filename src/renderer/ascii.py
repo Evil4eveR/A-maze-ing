@@ -9,6 +9,8 @@ from rich import print as rich_print
 
 
 class AsciiMazeRenderer(MazeRenderer[str]):
+    """Renders a maze as a Rich-coloured ASCII string."""
+
     name = 'ascii'
 
     def __init__(
@@ -17,6 +19,7 @@ class AsciiMazeRenderer(MazeRenderer[str]):
         themes: Theme | None = None,
         path: list[Cell] | None = None,
     ):
+        """Initialise renderer with maze, optional theme and path.""" # noqa
         super().__init__(maze)
         self.path = path
         self.renderer = [
@@ -27,14 +30,17 @@ class AsciiMazeRenderer(MazeRenderer[str]):
         self.connect = True
 
     def render(self) -> str:
+        """Render the maze and return it as a coloured ASCII string."""
         self._render_all()
         self.output_str = self._render_ascii()
         return self.output_str
 
     def display(self) -> None:
+        """Print the rendered maze to the terminal."""
         rich_print(self.render())
 
     def _render_all(self) -> None:
+        """Populate the internal renderer grid with cell, wall, and path values.""" # noqa
         for y in range(1, self.maze.height * 2, 2):
             for x in range(1, self.maze.width * 2, 2):
                 cell = self.maze.get_cell(x // 2, y // 2)
@@ -54,12 +60,14 @@ class AsciiMazeRenderer(MazeRenderer[str]):
         self._render_entry_exit()
 
     def _render_entry_exit(self) -> None:
+        """Mark entry and exit cells in the renderer grid."""
         en_x, en_y = self.maze.entry.x * 2 + 1, self.maze.entry.y * 2 + 1
         ex_x, ex_y = self.maze.exit.x * 2 + 1, self.maze.exit.y * 2 + 1
         self.renderer[en_y][en_x] = 4
         self.renderer[ex_y][ex_x] = 5
 
     def _get_exit_wall(self, cell: Cell) -> int:
+        """Return the wall direction that faces outward for a border cell."""
         if cell.y == 0:
             return Cell.WEST
         elif cell.y == self.maze.height - 1:
@@ -71,6 +79,7 @@ class AsciiMazeRenderer(MazeRenderer[str]):
         raise ValueError(f"Cell ({cell.x}, {cell.y}) is not on the border.")
 
     def _get_wall_coords(self, cell: Cell, wall: int) -> tuple[int, int]:
+        """Return renderer grid (col, row) for the wall segment of a cell."""
         x, y = cell.x * 2 + 1, cell.y * 2 + 1
         if wall == Cell.NORTH:
             return (x - 1, y)
@@ -83,6 +92,7 @@ class AsciiMazeRenderer(MazeRenderer[str]):
         raise ValueError(f"Unknown wall: {wall}")
 
     def _render_ascii(self) -> str:
+        """Convert the renderer grid to a Rich-formatted string."""
         s = ""
         for row in self.renderer:
             for cell in row:
@@ -106,6 +116,7 @@ class AsciiMazeRenderer(MazeRenderer[str]):
         chrs: str,
         color: str
     ) -> str:
+        """Wrap `chrs` in Rich color markup."""
         return f"[{color}]{chrs}[/{color}]"
 
     def _render_blocked_cells(
@@ -113,6 +124,7 @@ class AsciiMazeRenderer(MazeRenderer[str]):
         x: int,
         y: int,
     ) -> None:
+        """Mark a blocked cell and its right/below neighbours in the grid."""
         self.renderer[y][x] = 2
         if x + 2 < self.maze.width * 2 + 1:
             right = self.maze.get_cell((x + 2) // 2, y // 2)
@@ -130,6 +142,7 @@ class AsciiMazeRenderer(MazeRenderer[str]):
         x: int,
         y: int,
     ) -> None:
+        """Clear renderer grid slots for each open wall of a cell."""
         for wall in [cell.WEST, cell.SOUTH, cell.EAST, cell.NORTH]:
             if not cell.has_wall(wall):
                 if wall == cell.WEST:
@@ -142,6 +155,7 @@ class AsciiMazeRenderer(MazeRenderer[str]):
                     self.renderer[y][x - 1] = 0
 
     def _render_path(self) -> None:
+        """Mark solution path cells in the renderer grid."""
         if self.path is None:
             return
         for i, cell in enumerate(self.path):
@@ -154,6 +168,7 @@ class AsciiMazeRenderer(MazeRenderer[str]):
                 self.renderer[(y + ny) // 2][(x + nx) // 2] = 3
 
     def _render_explored(self) -> None:
+        """Mark explored (non-final path) cells in the renderer grid."""
         if self.path is None:
             return
         for cell in self.path:
@@ -161,6 +176,7 @@ class AsciiMazeRenderer(MazeRenderer[str]):
             self.renderer[y][x] = 3
 
     def _default_colors(self) -> list[tuple[int, int, int]]:
+        """Return the default RGB colour palette for renderer cell types."""
         return [
             (200, 200, 200),
             (120, 50, 150),

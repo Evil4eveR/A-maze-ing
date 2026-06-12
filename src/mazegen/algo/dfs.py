@@ -6,10 +6,11 @@ from ..models.maze import Maze
 
 
 class DFSMazeGenerator(MazeAlgorithm):
-    name = "dfs"
+    """Maze generator using depth-first search (recursive backtracker)."""
+    name = 'dfs'
 
     def generate(self, seed: int) -> None:
-        """Generate a maze using the Depth-First Search algorithm."""
+        """Generate a maze using DFS."""
         for _ in self._generate_dfs(seed):
             pass
         self._reset_visited()
@@ -18,7 +19,7 @@ class DFSMazeGenerator(MazeAlgorithm):
         self,
         seed: int
     ) -> Generator[Maze, None, None]:
-        """Generate a maze step-by-step using the Depth-First Search algorithm.""" # noqa
+        """Yield maze states step-by-step using DFS.""" # noqa
         yield from self._generate_dfs(seed)
         self._reset_visited()
 
@@ -26,6 +27,7 @@ class DFSMazeGenerator(MazeAlgorithm):
         self,
         seed: int
     ) -> Generator[Maze, None, None]:
+        """Core DFS generation logic; yields maze after each step."""
         rng = Random(seed)
         first_cell = self.maze.get_cell(0, 0)
         assert first_cell is not None

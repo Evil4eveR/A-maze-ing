@@ -3,6 +3,8 @@ from ..exceptions import MazeWallError
 
 
 class Cell:
+    """Single cell in the maze grid with wall and state tracking."""
+
     NORTH: ClassVar[int] = 0b0001
     EAST:  ClassVar[int] = 0b0010
     SOUTH: ClassVar[int] = 0b0100
@@ -16,6 +18,7 @@ class Cell:
         walls: int = 0b1111,
         blocked: bool = False
     ):
+        """Initialise a cell at column x, row y."""
         self.x = x
         self.y = y
         self.visited = visited
@@ -26,6 +29,7 @@ class Cell:
         self,
         direction: int
     ) -> None:
+        """Remove the given wall direction if present."""
         if not self.has_wall(direction):
             return
         self.walls &= ~direction
@@ -63,12 +67,14 @@ class Cell:
         self,
         value: int
     ) -> None:
+        """Raise MazeWallError if value is not a valid 4-bit wall bitmask."""
         if value is not None and not (0 <= value <= 0b1111):
             raise MazeWallError(
                 "Walls must be a 4-bit integer (0-15)."
             )
 
     def _validate_cell_between(self, other: 'Cell') -> tuple[int, int]:
+        """Return (dx, dy) to an adjacent cell, or raise MazeWallError."""
         dx = abs(other.x - self.x)
         dy = abs(other.y - self.y)
         if (dx == 1 and dy == 0) or (dx == 0 and dy == 1):
@@ -78,12 +84,15 @@ class Cell:
         )
 
     def __eq__(self, other: object) -> bool:
+        """Compare cells by (x, y) coordinates."""
         if not isinstance(other, Cell):
             raise TypeError("Can only compare Cell with another Cell.")
         return self.x == other.x and self.y == other.y
 
     def __hash__(self) -> int:
+        """Return a hash based on the cell's coordinates."""
         return hash((self.x, self.y))
 
     def __str__(self) -> str:
+        """Return the cell's coordinates as a string."""
         return f"({self.x}, {self.y})"

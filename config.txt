@@ -4,5 +4,5 @@ ENTRY=0,0
 EXIT=19,14
 OUTPUT_FILE=maze.txt
 PERFECT=true
-themes=
-# SEED=42
+# THEMES_PATH  Optional
+# SEED=42  Optional

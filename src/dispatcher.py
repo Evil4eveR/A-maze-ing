@@ -9,7 +9,10 @@ import readchar
 
 
 class Dispatcher:
+    """Event dispatcher that maps keypress characters to handler functions."""
+
     def __init__(self):
+        """Initialise empty handler registry and shared data store."""
         self._handlers: dict[str, Callable[..., Any]] = {}
         self.data: Dict[str, Any] = {}
         self.command_help: Dict[str, str] = {}
@@ -18,6 +21,7 @@ class Dispatcher:
         self._running = True
 
     def get_help(self) -> str:
+        """Return a formatted help string listing all registered keybindings.""" # noqa
         lines: list[str] = []
         for i, (key, text) in enumerate(self.command_help.items()):
             lines.append(
@@ -26,16 +30,19 @@ class Dispatcher:
         return "\n".join(lines)
 
     def startup(self, func: Callable[[Live], None]) -> Callable[[Live], None]:
+        """Register a function to run once before the main loop starts."""
         self._startup = func
         return func
 
     def shutdown(self, func: Callable[[], None]) -> Callable[[], None]:
+        """Register a function to run once after the main loop exits."""
         self._shutdown = func
         return func
 
     def on(
         self, key: str, help: str = ""
     ) -> Callable[[Callable[..., Any]], Callable[..., Any]]:
+        """Decorator that registers a handler for the given key character."""
         def decorator(func: Callable[..., Any]) -> Callable[..., Any]:
             self._handlers[key] = func
             self.command_help[key] = help
@@ -43,6 +50,7 @@ class Dispatcher:
         return decorator
 
     def dispatch(self, key: str, **kwargs: dict[str, Any]) -> bool:
+        """Call the handler registered for `key`, returning True if found."""
         if key in self._handlers:
             func = self._handlers[key]
             kw = self._filter_params(func, **kwargs)
@@ -55,6 +63,7 @@ class Dispatcher:
         func: Callable[..., Any],
         **kwargs: dict[str, Any]
     ) -> dict[str, Any]:
+        """Build kwargs for `func` by matching types from shared data store."""
         kw: dict[str, Any] = {}
         params = inspect.signature(func).parameters
         data = self.data.copy()
@@ -74,6 +83,7 @@ class Dispatcher:
         return kw
 
     def run(self, refresh_per_second: int = 10) -> None:
+        """Start the key-reading loop and dispatch events until stopped."""
         self._running = True
         _busy = False
         key_queue: queue.Queue[str] = queue.Queue()
@@ -109,4 +119,5 @@ class Dispatcher:
             self._shutdown()
 
     def stop(self) -> None:
+        """Signal the main loop to stop."""
         self._running = False

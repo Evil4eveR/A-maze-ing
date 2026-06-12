@@ -11,6 +11,7 @@ from config import settings
 def make_maze_config(
     algo: str | Type[MazeAlgorithm] = "prim",
 ) -> MazeConfig:
+    """Build a MazeConfig from application settings with default hooks."""
     hooks: list[MazeHook] = [Add42Pattern()]
     if not settings.perfect:
         hooks.append(BreakPerfect(percent=0.1, seed=settings.seed))

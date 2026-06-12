@@ -6,13 +6,17 @@ from ..models.maze import Maze
 
 
 class BreakPerfect(MazeHook):
+    """Post-generation hook that randomly removes walls to break maze perfection.""" # noqa
+
     stage = "post"
 
     def __init__(self, percent: float = 0.1, seed: int | None = None):
+        """Configure the fraction of walls to remove and optional seed."""
         self.percent = percent
         self.seed = seed
 
     def __call__(self, maze: Maze) -> Maze:
+        """Remove a random subset of walls and return the modified maze."""
         self._break_perfect(maze)
         return maze
 
@@ -20,6 +24,7 @@ class BreakPerfect(MazeHook):
         self,
         maze: Maze
     ) -> None:
+        """Randomly remove `percent` of internal walls."""
         rng = Random(self.seed)
         walls: list[tuple[Cell, Cell]] = []
 

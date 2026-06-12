@@ -8,9 +8,12 @@ from ..models.maze import Maze
 
 
 class KruskalMazeGenerator(MazeAlgorithm):
+    """Maze generator using Kruskal's algorithm."""
+
     name = 'kruskal'
 
     def generate(self, seed: int | None = None) -> None:
+        """Generate a maze using Kruskal's algorithm."""
         for _ in self._generate_kruskal(seed):
             pass
         self._reset_visited()
@@ -19,7 +22,7 @@ class KruskalMazeGenerator(MazeAlgorithm):
         self,
         seed: int | None = None
     ) -> Generator[Maze, None, None]:
-        """Generate a maze step-by-step using Kruskal's algorithm."""
+        """Yield maze states step-by-step using Kruskal's algorithm."""
         yield from self._generate_kruskal(seed)
         self._reset_visited()
 
@@ -27,6 +30,7 @@ class KruskalMazeGenerator(MazeAlgorithm):
         self,
         seed: int | None = None
     ) -> Generator[Maze, None, None]:
+        """Core Kruskal's generation logic; yields maze after each step."""
         rng = Random(seed)
 
         parent: dict[Cell, Cell] = {}

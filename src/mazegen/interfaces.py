@@ -9,7 +9,7 @@ T = TypeVar('T')
 
 
 class MazeAlgorithm(ABC):
-    name: str
+    """Abstract base class for maze generation algorithms."""
     _DIRECTIONS: ClassVar[list[tuple[int, int]]] = [
         (0, -1),  # NORTH
         (1, 0),   # EAST
@@ -21,6 +21,7 @@ class MazeAlgorithm(ABC):
         self,
         maze: Maze
     ):
+        """Initialise with the maze to generate."""
         self.maze = maze
 
     @abstractmethod
@@ -35,6 +36,7 @@ class MazeAlgorithm(ABC):
         self,
         seed: int
     ) -> Generator[Maze, None, None]:
+        """Yield maze states step-by-step (for animation)."""
         self.generate(seed)
         yield self.maze
 
@@ -43,6 +45,7 @@ class MazeAlgorithm(ABC):
         cell: Cell,
         visited: bool | None = None
     ) -> list[Cell]:
+        """Return neighbouring cells, optionally filtered by visited state."""
         neighbors = []
         for dx, dy in self._DIRECTIONS:
             neighbor = self.maze.get_cell(cell.x + dx, cell.y + dy)
@@ -52,12 +55,15 @@ class MazeAlgorithm(ABC):
         return neighbors
 
     def _reset_visited(self) -> None:
+        """Mark all cells in the maze as unvisited."""
         for row in self.maze.grid:
             for cell in row:
                 cell.visited = False
 
 
 class BaseMazeSolver(ABC):
+    """Abstract base class for maze solving algorithms."""
+
     name: str
 
     _DIRECTIONS: ClassVar[list[tuple[int, int]]] = [
@@ -71,6 +77,7 @@ class BaseMazeSolver(ABC):
         self,
         maze: Maze
     ):
+        """Initialise with the maze to solve."""
         self.maze = maze
 
     @abstractmethod
@@ -87,12 +94,15 @@ class BaseMazeSolver(ABC):
 
 
 class MazeRenderer(ABC, Generic[T]):
+    """Abstract base class for maze renderers."""
+
     name: str
 
     def __init__(
         self,
         maze: Maze
     ):
+        """Initialise with the maze to render."""
         self.maze = maze
 
     @abstractmethod

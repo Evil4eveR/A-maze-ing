@@ -6,6 +6,8 @@ from ..interfaces import MazeAlgorithm, MazeHook
 
 @dataclass
 class MazeConfig:
+    """Configuration parameters for maze generation."""
+
     width: int
     height: int
     algo: str | Type[MazeAlgorithm] = "dfs"
