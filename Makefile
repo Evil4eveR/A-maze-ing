@@ -1,29 +1,41 @@
-RUN		= uv run
-SRC		= src
-MAIN	= a_maze_ing.py
-CONFIG	= ../config.txt
-
-.PHONY: install run debug clean lint lint-strict
+PY  := python3
+URU  := uv run
+CFG ?= config.txt
+OUT ?= maze.txt
+MAZE := a_maze_ing.py
 
 install:
 	uv sync
 
 run:
-	cd $(SRC) && $(RUN) $(MAIN) $(CONFIG) && cd ..
+	$(URU) $(PY) a_maze_ing.py $(CFG)
+
+test:
+	$(URU) pytest -v tests/
 
 debug:
-	cd $(SRC) && $(RUN) -m pdb $(MAIN) $(CONFIG) && cd ..
+	$(URU) $(PY) -m pdb a_maze_ing.py $(CFG)
 
 clean:
+	find . -type d -name "__pycache__" -exec rm -rf {} +
 	find . -type f -name "*.pyc" -delete
-	find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null; true
-	rm -rf .mypy_cache
+	rm -rf .mypy_cache .pytest_cache
+
+output:
+	$(URU) $(PY) a_maze_ing.py $(CFG)
+	@echo
+	@echo "----- $(OUT) -----"
+	@cat $(OUT)
 
 lint:
-	flake8 .
-	mypy . --warn-return-any --warn-unused-ignores --ignore-missing-imports \
-		--disallow-untyped-defs --check-untyped-defs
+	$(URU) flake8 src/
+	$(URU) mypy src/ --warn-return-any --warn-unused-ignores \
+		--ignore-missing-imports --disallow-untyped-defs --check-untyped-defs
 
 lint-strict:
-	flake8 .
-	mypy . --strict
+	$(URU) flake8 src/
+	$(URU) mypy src/ --strict
+
+.PHONY: install run test debug clean lint lint-strict output
+
+

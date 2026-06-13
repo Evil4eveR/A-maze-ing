@@ -174,14 +174,3 @@ class AsciiMazeRenderer(MazeRenderer[str]):
         for cell in self.path:
             x, y = cell.x * 2 + 1, cell.y * 2 + 1
             self.renderer[y][x] = 3
-
-    def _default_colors(self) -> list[tuple[int, int, int]]:
-        """Return the default RGB colour palette for renderer cell types."""
-        return [
-            (200, 200, 200),
-            (120, 50, 150),
-            (100, 100, 100),
-            (255, 255, 0),
-            (255, 0, 255),
-            (255, 0, 0)
-        ]

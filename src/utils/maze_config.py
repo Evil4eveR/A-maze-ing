@@ -18,8 +18,8 @@ def make_maze_config(
     return MazeConfig(
         width=settings.width,
         height=settings.height,
-        entry_point=(0, 0),
-        exit_point=(settings.width - 1, settings.height - 1),
+        entry_point=settings.entry,
+        exit_point=settings.exit,
         hooks=hooks,
         algo=algo,
         seed=settings.seed
