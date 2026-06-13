@@ -8,8 +8,8 @@ class Maze:
         self,
         width: int,
         height: int,
-        entry_point: tuple = (0, 0),
-        exit_point: tuple | None = None,
+        entry_point: tuple[int, int] = (0, 0),
+        exit_point: tuple[int, int] | None = None,
     ):
         """Initialise maze grid with given dimensions and entry/exit points."""
         self.width = width

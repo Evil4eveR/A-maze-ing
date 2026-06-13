@@ -11,7 +11,7 @@ class MazeConfig:
     width: int
     height: int
     algo: str | Type[MazeAlgorithm] = "dfs"
-    entry_point: tuple = (0, 0)
-    exit_point: tuple | None = None
+    entry_point: tuple[int, int] = (0, 0)
+    exit_point: tuple[int, int] | None = None
     seed: int | None = None
     hooks: list[MazeHook] | None = None

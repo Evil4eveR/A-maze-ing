@@ -14,9 +14,13 @@ dependencies = [
     "readchar>=4.2.2",
     "rich>=15.0.0",
     "setuptools>=82.0.1",
+    "types-setuptools>=82.0.0.20260518",
 ]
 
 [dependency-groups]
 dev = [
     "pytest>=9.0.3",
 ]
+
+[tool.mypy]
+plugins = ["pydantic.mypy"]

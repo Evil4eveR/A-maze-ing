@@ -4,11 +4,11 @@ CFG ?= config.txt
 OUT ?= maze.txt
 MAZE := a_maze_ing.py
 
-install:
-	uv sync
-
 run:
 	$(URU) $(PY) a_maze_ing.py $(CFG)
+
+install:
+	uv sync
 
 test:
 	$(URU) pytest -v tests/
@@ -28,13 +28,13 @@ output:
 	@cat $(OUT)
 
 lint:
-	$(URU) flake8 src/
-	$(URU) mypy src/ --warn-return-any --warn-unused-ignores \
+	$(URU) flake8 src/ $(MAZE)
+	$(URU) mypy src/ $(MAZE) --warn-return-any --warn-unused-ignores \
 		--ignore-missing-imports --disallow-untyped-defs --check-untyped-defs
 
 lint-strict:
-	$(URU) flake8 src/
-	$(URU) mypy src/ --strict
+	$(URU) flake8 src/ $(MAZE)
+	$(URU) mypy src/ $(MAZE) --strict
 
 .PHONY: install run test debug clean lint lint-strict output
 

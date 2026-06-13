@@ -11,7 +11,7 @@ import readchar
 class Dispatcher:
     """Event dispatcher that maps keypress characters to handler functions."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialise empty handler registry and shared data store."""
         self._handlers: dict[str, Callable[..., Any]] = {}
         self.data: Dict[str, Any] = {}

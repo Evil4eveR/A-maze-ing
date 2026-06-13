@@ -3,7 +3,7 @@ sys.path.append('.')
 sys.path.append('src')
 
 
-def main():
+def main() -> None:
     from main import dp
     dp.run()
 

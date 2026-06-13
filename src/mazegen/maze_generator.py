@@ -34,7 +34,6 @@ class MazeGenerator:
     @classmethod
     def create(cls, config: MazeConfig) -> Maze:
         """Build and return a fully generated maze from the given config."""
-        maze = None
         for maze in cls._build(config, animated=False):
             pass
         return maze

@@ -10,6 +10,9 @@ T = TypeVar('T')
 
 class MazeAlgorithm(ABC):
     """Abstract base class for maze generation algorithms."""
+
+    name: str
+
     _DIRECTIONS: ClassVar[list[tuple[int, int]]] = [
         (0, -1),  # NORTH
         (1, 0),   # EAST

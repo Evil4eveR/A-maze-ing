@@ -27,14 +27,14 @@ class Settings(BaseSettings):
     seed: int | None = None
     themes_path: str = "themes.json"
 
-    @computed_field
+    @computed_field  # type: ignore[prop-decorator]
     @property
     def entry(self) -> tuple[int, int]:
         """Parse ENTRY config key into an (x, y) tuple."""
         x, y = self.entry_raw.split(',')
         return int(x), int(y)
 
-    @computed_field
+    @computed_field  # type: ignore[prop-decorator]
     @property
     def exit(self) -> tuple[int, int]:
         """Parse EXIT config key into an (x, y) tuple."""
