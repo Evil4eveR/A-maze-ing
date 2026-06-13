@@ -6,6 +6,8 @@ from ..models.cell import Cell
 
 
 class AddBlockedArea(MazeHook):
+    """Pre-generation hook that marks a rectangular region as blocked."""
+
     stage = "pre"
 
     def __init__(
@@ -15,19 +17,21 @@ class AddBlockedArea(MazeHook):
         height: int,
         maze_resize: bool = False
     ):
+        """Configure the blocked area position, size, and optional resize."""
         self.start = start
         self.width = width
         self.height = height
         self.maze_resize = maze_resize
 
     def __call__(self, maze: Maze) -> Maze:
-        self.add_blocked_area(maze)
+        """Apply the blocked area to the maze and return it."""
         return maze
 
     def add_blocked_area(
         self,
         maze: Maze
     ) -> None:
+        """Block the configured region, optionally resizing the maze first."""
         if self.maze_resize:
             maze.width = self.width + maze.width
             maze.height = self.height + maze.height
@@ -40,17 +44,19 @@ class AddBlockedArea(MazeHook):
             raise MazeSizeError(
                 "Blocked area exceeds maze boundaries."
             )
-        self._add_blocked_area(maze)
+        self._add_blocked_area(maze, start)
 
-    def _add_blocked_area(self, maze: Maze) -> None:
-        for y in range(self.start[1], self.start[1] + self.height):
-            for x in range(self.start[0], self.start[0] + self.width):
+    def _add_blocked_area(self, maze: Maze, start: tuple[int, int]) -> None:
+        """Mark cells in the rectangle starting at `start` as blocked."""
+        for y in range(start[1], start[1] + self.height):
+            for x in range(start[0], start[0] + self.width):
                 maze.grid[y][x].blocked = True
 
     def _get_coordinates(
         self,
         maze: Maze
     ) -> tuple[tuple[int, int], tuple[int, int]]:
+        """Return (start, end) absolute coordinates for the blocked area."""
         if isinstance(self.start, str):
             start = self._get_coordinates_by_str(maze)
         else:
@@ -62,6 +68,8 @@ class AddBlockedArea(MazeHook):
         self,
         maze: Maze
     ) -> tuple[int, int]:
+        """Resolve a named position string (e.g. 'center:center') to (x, y)."""
+        assert isinstance(self.start, str)
         height = maze.height
         width = maze.width
         positions = {

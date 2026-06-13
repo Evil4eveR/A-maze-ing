@@ -5,27 +5,27 @@ import sys
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
 from rich import print
-from mazegen.maze_generator import MazeGenerator
+from maze_generator import MazeGenerator
 
 from config import settings
 
-from mazegen.models.cell import Cell
+from models.cell import Cell
 
-from mazegen.models.maze import Maze
+from models.maze import Maze
 from renderer.ascii import AsciiMazeRenderer
 
-from mazegen.solver.bfs import BFSMazeSolver
-from mazegen.hooks import BreakPerfect, Add42Pattern
+from solver.bfs import BFSMazeSolver
+from hooks import BreakPerfect, Add42Pattern
 
-from mazegen.models.maze_config import MazeConfig
+from models.maze_config import MazeConfig
 
 from rich.live import Live
 
 
 cfg = MazeConfig(
-    width=20,
-    height=10,
-    entry_point=(19, 9),
+    width=8,
+    height=7,
+    entry_point=(7, 6),
     exit_point=(1, 1),
     hooks=[
         Add42Pattern(),

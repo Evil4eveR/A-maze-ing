@@ -6,6 +6,8 @@ from ..models.maze import Maze
 
 
 class Add42Pattern(MazeHook):
+    """Pre-generation hook that stamps a '42' pattern of blocked cells."""
+
     stage = "pre"
 
     MIN_WIDTH = 8
@@ -16,6 +18,7 @@ class Add42Pattern(MazeHook):
     ]
 
     def __call__(self, maze: Maze) -> Maze:
+        """Stamp the 42 pattern onto the maze, raising MazeSizeError if too small.""" # noqa
         if maze.width < self.MIN_WIDTH or maze.height < self.MIN_HEIGHT:
             raise MazeSizeError(
                 f"Maze must be at least {self.MIN_WIDTH}x{self.MIN_HEIGHT} "

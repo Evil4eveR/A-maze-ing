@@ -8,9 +8,12 @@ from ..models.maze import Maze
 
 
 class KruskalMazeGenerator(MazeAlgorithm):
+    """Maze generator using Kruskal's algorithm."""
+
     name = 'kruskal'
 
     def generate(self, seed: int | None = None) -> None:
+        """Generate a maze using Kruskal's algorithm."""
         for _ in self._generate_kruskal(seed):
             pass
         self._reset_visited()
@@ -19,22 +22,24 @@ class KruskalMazeGenerator(MazeAlgorithm):
         self,
         seed: int | None = None
     ) -> Generator[Maze, None, None]:
-        """Generate a maze step-by-step using Kruskal's algorithm."""
+        """Yield maze states step-by-step using Kruskal's algorithm."""
         yield from self._generate_kruskal(seed)
         self._reset_visited()
 
     def _generate_kruskal(
         self,
         seed: int | None = None
-    ) -> Generator[Maze, None, None] | None:
+    ) -> Generator[Maze, None, None]:
+        """Core Kruskal's generation logic; yields maze after each step."""
         rng = Random(seed)
 
-        parent = {}
+        parent: dict[Cell, Cell] = {}
         for y in range(self.maze.height):
             for x in range(self.maze.width):
                 cell = self.maze.get_cell(x, y)
-                if not cell.blocked:
-                    parent[cell] = cell
+                if cell is None or cell.blocked:
+                    continue
+                parent[cell] = cell
 
         def find(cell: Cell) -> Cell:
             if parent[cell] != cell:
@@ -47,11 +52,11 @@ class KruskalMazeGenerator(MazeAlgorithm):
         def connected(a: Cell, b: Cell) -> bool:
             return find(a) == find(b)
 
-        walls = []
+        walls: list[tuple[Cell, Cell]] = []
         for y in range(self.maze.height):
             for x in range(self.maze.width):
                 cell = self.maze.get_cell(x, y)
-                if cell.blocked:
+                if cell is None or cell.blocked:
                     continue
                 for dx, dy in self._DIRECTIONS:
                     neighbor = self.maze.get_cell(x + dx, y + dy)

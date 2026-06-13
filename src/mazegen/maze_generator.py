@@ -3,6 +3,8 @@ from typing import Generator
 from collections import deque
 from random import randint
 
+from .interfaces import MazeAlgorithm
+
 from .algo.dfs import DFSMazeGenerator
 from .algo.kruskal import KruskalMazeGenerator
 
@@ -20,6 +22,8 @@ from .models.maze_config import MazeConfig
 
 
 class MazeGenerator:
+    """Facade for building a Maze from a MazeConfig using pluggable algorithms.""" # noqa
+
     ALGO_MAP = {
         'dfs': DFSMazeGenerator,
         'prim': PrimMazeGenerator,
@@ -29,7 +33,8 @@ class MazeGenerator:
 
     @classmethod
     def create(cls, config: MazeConfig) -> Maze:
-        for maze in cls._build(config):
+        """Build and return a fully generated maze from the given config."""
+        for maze in cls._build(config, animated=False):
             pass
         return maze
 
@@ -38,6 +43,7 @@ class MazeGenerator:
         cls,
         config: MazeConfig
     ) -> Generator[Maze, None, None]:
+        """Yield maze states step-by-step for animated generation."""
         yield from cls._build(config, animated=True)
 
     @classmethod
@@ -46,6 +52,7 @@ class MazeGenerator:
         cfg: MazeConfig,
         animated: bool = False
     ) -> Generator[Maze, None, None]:
+        """Internal generator that constructs, hooks, and validates the maze.""" # noqa
         maze = Maze(
             width=cfg.width,
             height=cfg.height,
@@ -59,9 +66,11 @@ class MazeGenerator:
         pre_hooks = [hook for hook in cfg.hooks or [] if hook.stage == "pre"]
         post_hooks = [hook for hook in cfg.hooks or [] if hook.stage == "post"]
 
-        algo_class = cfg.algo
+        algo_class: type[MazeAlgorithm] | None = None
         if isinstance(cfg.algo, str):
-            algo_class = cls.ALGO_MAP.get(cfg.algo or '')
+            algo_class = cls.ALGO_MAP.get(cfg.algo)
+        else:
+            algo_class = cfg.algo
 
         if algo_class is None:
             raise MazeError(f"Unsupported algorithm: {cfg.algo}")
@@ -86,10 +95,9 @@ class MazeGenerator:
 
         cls._valid_entry_exit(maze)
 
-        return maze
-
     @staticmethod
     def _valid_entry_exit(maze: Maze) -> None:
+        """Raise InvalidEntryExitError if entry/exit are invalid or identical.""" # noqa
         if not (maze.entry and maze.exit):
             raise InvalidEntryExitError(
                 "Entry and exit points must be defined."
@@ -105,6 +113,7 @@ class MazeGenerator:
 
     @staticmethod
     def _is_connected(maze: Maze) -> bool:
+        """Return True if all non-blocked cells are reachable from entry."""
         start = maze.entry
         if start.blocked:
             return False
@@ -132,6 +141,6 @@ class MazeGenerator:
 
     @classmethod
     def _validate(cls, maze: Maze) -> None:
-        cls._valid_entry_exit(maze)
+        """Validate entry/exit and maze connectivity, raising on failure."""
         if not cls._is_connected(maze):
             raise MazeSizeError("Blocked areas disconnect the maze.")

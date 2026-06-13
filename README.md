@@ -1,4 +1,4 @@
-This project has been created as part of the 42 curriculum by dbobrov[, ymarmoud]
+This project has been created as part of the 42 curriculum by dbobrov, ymarmoud
 
 # A-Maze-ing
 
@@ -60,37 +60,63 @@ The project is built with a modular, object-oriented architecture. The maze gene
 
 ```
 A-maze-ing/
-├── Makefile                 # Build automation
-├── README.md                # This file
-├── Task.pdf                 # Project assignment
-├── config.txt               # Default configuration file
-├── pyproject.toml            # Python project metadata
-├── uv.lock                  # Dependency lock file
-└── src/                     # Source code — see src/README.md
-    ├── a_maze_ing.py         # Main entry point
-    ├── config.py             # Settings / configuration loader
-    ├── exceptions.py         # Custom exception classes
-    ├── interfaces.py         # Abstract base classes & protocols
-    ├── maze_generator.py     # MazeGenerator facade (reusable module)
-    ├── test.py               # Manual test / demo script
-    ├── algo/                 # Generation algorithms — see src/algo/README.md
-    │   ├── dfs.py
-    │   ├── kruskal.py
-    │   ├── prim.py
-    │   └── wilson.py
-    ├── models/               # Data models — see src/models/README.md
-    │   ├── cell.py
-    │   └── maze.py
-    ├── renderer/             # Rendering engines — see src/renderer/README.md
-    │   └── ascii.py
-    ├── solver/               # Solving algorithms — see src/solver/README.md
-    │   └── bfs.py
-    ├── hooks/                # Pre/post-generation hooks — see src/hooks/README.md
-    │   ├── blocked_area.py
-    │   ├── break_perfect.py
-    │   └── pattern_42.py
-    └── utils/                # Utility functions — see src/utils/README.md
-        └── algo.py
+├── Makefile                          # Build automation
+├── README.md                         # This file
+├── Task.pdf                          # Project assignment
+├── config.txt                        # Default configuration file
+├── mazegen-1.0.0-py3-none-any.whl    # Pre-built Python wheel package
+├── pyproject.toml                    # Python project metadata
+├── themes.json                       # Theme configuration data
+├── uv.lock                           # Dependency lock file
+├── a_maze_ing.py                     # CLI entry point script wrapper
+├── test.py                           # Manual test / demo script
+├── src/                              # Source code root
+│   ├── config.py                     # Settings / configuration loader
+│   ├── dispatcher.py                 # Command dispatcher / CLI controller
+│   ├── main.py                       # Main application entry point
+│   ├── setup.py                      # Installation setup script
+│   ├── mazegen/                      # Core maze generation package — see src/mazegen/README.md
+│   │   ├── README.md                 # Core engine documentation
+│   │   ├── __init__.py
+│   │   ├── exceptions.py             # Custom exception classes
+│   │   ├── interfaces.py             # Abstract base classes & protocols
+│   │   ├── maze_generator.py         # MazeGenerator facade (reusable module)
+│   │   ├── maze_solver.py            # MazeSolver facade module
+│   │   ├── algo/                     # Generation algorithms
+│   │   │   ├── __init__.py
+│   │   │   ├── dfs.py
+│   │   │   ├── kruskal.py
+│   │   │   ├── prim.py
+│   │   │   └── wilson.py
+│   │   ├── hooks/                    # Pre/post-generation hooks
+│   │   │   ├── __init__.py
+│   │   │   ├── blocked_area.py
+│   │   │   ├── break_perfect.py
+│   │   │   └── pattern_42.py
+│   │   ├── models/                   # Internal engine data models
+│   │   │   ├── __init__.py
+│   │   │   ├── cell.py
+│   │   │   ├── maze_config.py
+│   │   │   └── maze.py
+│   │   └── solver/                   # Solving algorithms
+│   │       ├── __init__.py
+│   │       └── bfs.py
+│   ├── models/                       # Global application models
+│   │   ├── __init__.py
+│   │   └── theme.py                  # Theme schemas & properties
+│   ├── renderer/                     # Rendering engines
+│   │   ├── __init__.py
+│   │   └── ascii.py                  # Text-based maze renderer
+│   └── utils/                        # Utility functions and helpers
+│       ├── __init__.py
+│       ├── file.py                   # File I/O operations
+│       ├── maze_config.py            # Configuration validation helpers
+│       └── ui.py                     # Terminal UI/output formatting
+└── tests/                            # Test suite containing unit and integration tests
+    ├── __init__.py
+    ├── conftest.py                   # Pytest shared fixtures and configurations
+    └── test_*.py                     # Component-specific test modules (dfs, bfs, interfaces, etc.)
+
 ```
 
 ## Instructions
